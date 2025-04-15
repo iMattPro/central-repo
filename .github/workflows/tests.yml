@@ -1,7 +1,34 @@
-name: iMattPro Test Workflow
+name: Run Tests
 
 on:
   workflow_call:
+    inputs:
+      EXTNAME:
+        required: true
+        type: string
+      SNIFF:
+        required: true
+        type: string
+      IMAGE_ICC:
+        required: true
+        type: string
+      EPV:
+        required: true
+        type: string
+      EXECUTABLE_FILES:
+        required: true
+        type: string
+      PHPBB_BRANCH:
+        required: true
+        type: string
+
+env:
+    EXTNAME: ${{ inputs.EXTNAME }}
+    SNIFF: ${{ inputs.SNIFF }}
+    IMAGE_ICC: ${{ inputs.IMAGE_ICC }}
+    EPV: ${{ inputs.EPV }}
+    EXECUTABLE_FILES: ${{ inputs.EXECUTABLE_FILES }}
+    PHPBB_BRANCH: ${{ inputs.PHPBB_BRANCH }}
 
 jobs:
     # START Basic Checks Job (EPV, code sniffer, images check, etc.)
