@@ -18,6 +18,9 @@ on:
       EXECUTABLE_FILES:
         required: true
         type: string
+      CODECOV:
+        required: true
+        type: string
       PHPBB_BRANCH:
         required: true
         type: string
@@ -28,6 +31,7 @@ env:
     IMAGE_ICC: ${{ inputs.IMAGE_ICC }}
     EPV: ${{ inputs.EPV }}
     EXECUTABLE_FILES: ${{ inputs.EXECUTABLE_FILES }}
+    CODECOV: ${{ inputs.CODECOV }}
     PHPBB_BRANCH: ${{ inputs.PHPBB_BRANCH }}
 
 jobs:
@@ -123,8 +127,8 @@ jobs:
                       db: "mysql:5.6"
                     - php: '7.2'
                       db: "mysql:5.7"
-                      COVERAGE: 1
-                      db_alias: "mysql:5.7 with Coverage"
+                      db_alias: ${{ env.CODECOV == '1' && 'mysql:5.7 with Coverage' || 'mysql:5.7' }}
+                      COVERAGE: ${{ env.CODECOV == '1' && 1 || 0 }}
                     - php: '7.3'
                       db: "mysql:5.7"
                     - php: '7.4'
@@ -239,7 +243,7 @@ jobs:
               run: |
                   if [ $COVERAGE == '1' ]
                   then
-                      phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/.github/phpunit-$DB-github.xml --bootstrap ./tests/bootstrap.php --coverage-clover build/logs/clover.xml --testsuite 'phpBB Test Suite'
+                      phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/.github/phpunit-$DB-github.xml --bootstrap ./tests/bootstrap.php --coverage-clover build/logs/clover.xml
                   else
                       phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/.github/phpunit-$DB-github.xml --bootstrap ./tests/bootstrap.php
                   fi
