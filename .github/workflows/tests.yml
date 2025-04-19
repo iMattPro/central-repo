@@ -22,6 +22,10 @@ on:
         required: false
         default: '0'
         type: string
+      CODECOV_TOKEN:
+        required: false
+        default: ''
+        type: string  
       PHPBB_BRANCH:
         required: true
         type: string
@@ -33,6 +37,7 @@ env:
     EPV: ${{ inputs.EPV == '1' && '1' || '0' }}
     EXECUTABLE_FILES: ${{ inputs.EXECUTABLE_FILES == '1' && '1' || '0' }}
     CODECOV: ${{ inputs.CODECOV == '1' && '1' || '0' }}
+    CODECOV_TOKEN: ${{ inputs.CODECOV_TOKEN }}
     PHPBB_BRANCH: ${{ inputs.PHPBB_BRANCH }}
 
 jobs:
@@ -245,7 +250,7 @@ jobs:
               if: ${{ matrix.COVERAGE == 1 && env.CODECOV == '1' }}
               uses: codecov/codecov-action@v5
               with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
+                  token: ${{ env.CODECOV_TOKEN }}
     # END MySQL and MariaDB Job
 
     # START PostgreSQL Job
